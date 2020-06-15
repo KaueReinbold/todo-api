@@ -4,13 +4,15 @@ import {
 } from 'https://deno.land/x/oak@v5.2.0/mod.ts';
 import { green, yellow } from 'https://deno.land/std@0.53.0/fmt/colors.ts';
 
+import environment from './environment.ts';
+
 import logger from './middlewares/logger.ts';
 import notFound from './middlewares/notFound.ts';
 
 import todoRouter from './routes/todo.ts';
 
 const app = new Application();
-const listenOptions: ListenOptions = { port: 8080 };
+const listenOptions: ListenOptions = { port: environment.PORT };
 
 app.use(logger.logger);
 app.use(logger.responseTime);
