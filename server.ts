@@ -3,6 +3,7 @@ import {
   ListenOptions,
   Router,
 } from 'https://deno.land/x/oak@v5.2.0/mod.ts';
+import { green, yellow } from 'https://deno.land/std@0.53.0/fmt/colors.ts';
 
 const app = new Application();
 const listenOptions: ListenOptions = { port: 8080 };
@@ -15,6 +16,11 @@ router.get('/', ({ response }: { response: any }) => {
 app.use(router.routes());
 app.use(router.allowedMethods());
 
-await app.listen(listenOptions);
+app.addEventListener('listen', ({ secure, hostname, port }) => {
+  const protocol = secure ? 'https://' : 'http://';
+  const url = `${protocol}${hostname ?? 'localhost'}:${port}`;
 
-console.log('running on port ', listenOptions.port);
+  console.log(`${yellow('Listening on:')} ${green(url)}`);
+});
+
+await app.listen(listenOptions);
