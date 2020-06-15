@@ -99,5 +99,26 @@ export default {
       }
     }
   },
-  delete: () => {},
+  delete: ({
+    request,
+    response,
+    params,
+  }: {
+    request: Request;
+    response: Response;
+    params: any;
+  }) => {
+    let { id }: { id: string } = params;
+    const todoFound: ITodo | undefined = todos.find((todo) => todo.id === id);
+
+    if (!todoFound) {
+      response.status = 404;
+    } else {
+      const todoIndex = todos.findIndex((todo) => todo.id == todoFound.id);
+
+      todos.splice(todoIndex, 1);
+
+      response.status = 200;
+    }
+  },
 };
