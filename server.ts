@@ -5,8 +5,7 @@ import {
 } from 'https://deno.land/x/oak@v5.2.0/mod.ts';
 
 const app = new Application();
-const port: number = 8080;
-
+const listenOptions: ListenOptions = { port: 8080 };
 const router = new Router();
 
 router.get('/', ({ response }: { response: any }) => {
@@ -16,6 +15,6 @@ router.get('/', ({ response }: { response: any }) => {
 app.use(router.routes());
 app.use(router.allowedMethods());
 
-await app.listen({ port } as ListenOptions);
+await app.listen(listenOptions);
 
-console.log('running on port ', port);
+console.log('running on port ', listenOptions.port);
