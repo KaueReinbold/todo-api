@@ -65,6 +65,39 @@ export default {
       response.body = todo;
     }
   },
-  update: async () => {},
+  update: async ({
+    request,
+    response,
+    params,
+  }: {
+    request: Request;
+    response: Response;
+    params: any;
+  }) => {
+    if (!request.hasBody) {
+      response.status = 400;
+      response.body = 'No data provided';
+    } else {
+      let { id }: { id: string } = params;
+      const todoFound: ITodo | undefined = todos.find((todo) => todo.id === id);
+
+      if (!todoFound) {
+        response.status = 404;
+      } else {
+        const body = await request.body();
+        const todoUpdated = body.value as ITodo;
+
+        todoFound.title = todoUpdated.title;
+        todoFound.isCompleted = todoUpdated.isCompleted;
+
+        todos.map((todo) =>
+          todo.id === todo.id ? { ...todo, ...todoFound } : todo
+        );
+
+        response.status = 200;
+        response.body = todoFound;
+      }
+    }
+  },
   delete: () => {},
 };
