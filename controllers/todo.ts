@@ -46,7 +46,25 @@ export default {
       response.body = todo;
     }
   },
-  getById: () => {},
+  getById: ({
+    request,
+    response,
+    params,
+  }: {
+    request: Request;
+    response: Response;
+    params: any;
+  }) => {
+    let { id }: { id: string } = params;
+    const todo: ITodo | undefined = todos.find((todo) => todo.id === id);
+
+    if (!todo) {
+      response.status = 404;
+    } else {
+      response.status = 200;
+      response.body = todo;
+    }
+  },
   update: async () => {},
   delete: () => {},
 };
