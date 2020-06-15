@@ -1,6 +1,6 @@
 # Deno TODO Api
 
-The technical objective is to learn how to use Deno.
+The technical objective is to learn how to use [Deno](https://deno.land/).
 
 ## Inspiration
 
