@@ -1,20 +1,16 @@
 import {
   Application,
   ListenOptions,
-  Router,
 } from 'https://deno.land/x/oak@v5.2.0/mod.ts';
 import { green, yellow } from 'https://deno.land/std@0.53.0/fmt/colors.ts';
 
+import todoRouter from './routes/todo.ts';
+
 const app = new Application();
 const listenOptions: ListenOptions = { port: 8080 };
-const router = new Router();
 
-router.get('/', ({ response }: { response: any }) => {
-  response.body = { message: 'Hello World' };
-});
-
-app.use(router.routes());
-app.use(router.allowedMethods());
+app.use(todoRouter.routes());
+app.use(todoRouter.allowedMethods());
 
 app.addEventListener('listen', ({ secure, hostname, port }) => {
   const protocol = secure ? 'https://' : 'http://';
