@@ -9,7 +9,7 @@ import environment from './environment.ts';
 import logger from './middlewares/logger.ts';
 import notFound from './middlewares/notFound.ts';
 
-import todoRouter from './routes/todo.ts';
+import TodoRouter from './routes/TodoRouter.ts';
 
 const app = new Application();
 const listenOptions: ListenOptions = { port: environment.PORT };
@@ -17,8 +17,8 @@ const listenOptions: ListenOptions = { port: environment.PORT };
 app.use(logger.logger);
 app.use(logger.responseTime);
 
-app.use(todoRouter.routes());
-app.use(todoRouter.allowedMethods());
+app.use(TodoRouter.routes());
+app.use(TodoRouter.allowedMethods());
 
 app.use(notFound);
 
