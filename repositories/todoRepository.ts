@@ -2,8 +2,8 @@ import client, { TABLE, DATABASE_NAME } from '../database/client.ts';
 
 import ITodo from '../interfaces/ITodo.ts';
 
-export default {
-  exists: async ({ id }: ITodo) => {
+const TodoRepository = {
+  exists: async (id: number) => {
     const [
       result,
     ] = await client.query(
@@ -17,23 +17,32 @@ export default {
 
     return todos;
   },
-  get: async ({ id }: ITodo) => {
-    return await client.query(`SELECT * FROM ${TABLE.TODO} WHERE id = ?`, [id]);
+  get: async (id: number) => {
+    const todos = await client.query(
+      `SELECT * FROM ${TABLE.TODO} WHERE id = ?`,
+      [id]
+    );
+    return todos[0];
   },
   add: async ({ title, isCompleted }: ITodo) => {
-    return await client.query(
+    const result = await client.query(
       `INSERT INTO ${TABLE.TODO}(title, isCompleted) values(?, ?)`,
       [title, isCompleted]
     );
+    return {
+      id: result.affectedRows,
+      title: title,
+      isCompleted: isCompleted,
+    } as ITodo;
   },
-  update: async ({ id, title, isCompleted }: ITodo) => {
+  update: async (id: number, todo: ITodo) => {
     const result = await client.query(
       `UPDATE ${TABLE.TODO} SET title=?, isCompleted=? WHERE id=?`,
-      [title, isCompleted, id]
+      [todo.title, todo.isCompleted, id]
     );
     return result.affectedRows;
   },
-  delete: async ({ id }: ITodo) => {
+  delete: async (id: number) => {
     const result = await client.query(
       `DELETE FROM ${TABLE.TODO} WHERE id = ?`,
       [id]
@@ -41,3 +50,5 @@ export default {
     return result.affectedRows;
   },
 };
+
+export default TodoRepository;
