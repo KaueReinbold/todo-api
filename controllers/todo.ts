@@ -5,7 +5,6 @@ import {
 } from 'https://deno.land/x/oak@v5.2.0/mod.ts';
 import { v4 } from 'https://deno.land/std/uuid/mod.ts';
 
-import todos from '../stubs/todos.ts';
 import ITodo from '../interfaces/ITodo.ts';
 import todoRepository from '../repositories/todoRepository.ts';
 
