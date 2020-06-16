@@ -2,8 +2,8 @@ import { Client } from 'https://deno.land/x/mysql/mod.ts';
 
 import environment from '../environment.ts';
 
-const DATABASE_NAME: string = 'deno';
-const TABLE = {
+export const DATABASE_NAME: string = 'deno';
+export const TABLE = {
   TODO: 'todo',
 };
 
