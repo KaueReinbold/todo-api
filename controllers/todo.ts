@@ -61,7 +61,7 @@ export default {
       console.error(error);
     }
   },
-  getById: ({
+  getById: async ({
     request,
     response,
     params,
@@ -70,14 +70,21 @@ export default {
     response: Response;
     params: any;
   }) => {
-    let { id }: { id: string } = params;
-    const todo: ITodo | undefined = todos.find((todo) => todo.id === id);
+    try {
+      let { id }: { id: string } = params;
+      const todoIsAvailable = await todoRepository.exists({ id });
 
-    if (!todo) {
-      response.status = 404;
-    } else {
-      response.status = 200;
-      response.body = todo;
+      if (!todoIsAvailable) {
+        response.status = 404;
+      } else {
+        const todo = await todoRepository.get({ id });
+
+        response.status = 200;
+        response.body = todo;
+      }
+    } catch (error) {
+      response.status = 400;
+      console.error(error);
     }
   },
   update: async ({
