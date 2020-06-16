@@ -33,5 +33,11 @@ export default {
     );
     return result.affectedRows;
   },
-  delete: async ({ id }: ITodo) => {},
+  delete: async ({ id }: ITodo) => {
+    const result = await client.query(
+      `DELETE FROM ${TABLE.TODO} WHERE id = ?`,
+      [id]
+    );
+    return result.affectedRows;
+  },
 };
