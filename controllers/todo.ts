@@ -96,29 +96,37 @@ export default {
     response: Response;
     params: any;
   }) => {
-    if (!request.hasBody) {
-      response.status = 400;
-      response.body = 'No data provided';
-    } else {
-      let { id }: { id: string } = params;
-      const todoFound: ITodo | undefined = todos.find((todo) => todo.id === id);
-
-      if (!todoFound) {
-        response.status = 404;
+    try {
+      if (!request.hasBody) {
+        response.status = 400;
+        response.body = 'No data provided';
       } else {
-        const body = await request.body();
-        const todoUpdated = body.value as ITodo;
+        let { id }: { id: string } = params;
+        const todoIsAvailable = await todoRepository.exists({
+          id,
+        });
 
-        todoFound.title = todoUpdated.title;
-        todoFound.isCompleted = todoUpdated.isCompleted;
+        if (!todoIsAvailable) {
+          response.status = 404;
+        } else {
+          const body = await request.body();
+          const todoUpdated = body.value as ITodo;
 
-        todos.map((todo) =>
-          todo.id === todo.id ? { ...todo, ...todoFound } : todo
-        );
+          await todoRepository.update({
+            id,
+            title: todoUpdated.title,
+            isCompleted: todoUpdated.isCompleted,
+          });
 
-        response.status = 200;
-        response.body = todoFound;
+          todoUpdated.id = id;
+
+          response.status = 200;
+          response.body = todoUpdated;
+        }
       }
+    } catch (error) {
+      response.status = 400;
+      console.error(error);
     }
   },
   delete: ({
