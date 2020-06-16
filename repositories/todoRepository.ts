@@ -17,7 +17,9 @@ export default {
 
     return todos;
   },
-  get: async ({ id }: ITodo) => {},
+  get: async ({ id }: ITodo) => {
+    return await client.query(`SELECT * FROM ${TABLE.TODO} WHERE id = ?`, [id]);
+  },
   add: async ({ title, isCompleted }: ITodo) => {
     return await client.query(
       `INSERT INTO ${TABLE.TODO}(title, isCompleted) values(?, ?)`,
