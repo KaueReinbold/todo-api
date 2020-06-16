@@ -4,5 +4,5 @@ const environment = config();
 
 export default {
   MYSQL_PASSWORD: environment.MYSQL_PASSWORD,
-  PORT: environment.PORT,
+  PORT: Number(environment.PORT),
 };
