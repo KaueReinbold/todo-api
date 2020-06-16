@@ -26,6 +26,12 @@ export default {
       [title, isCompleted]
     );
   },
-  update: async ({ id, title, isCompleted }: ITodo) => {},
+  update: async ({ id, title, isCompleted }: ITodo) => {
+    const result = await client.query(
+      `UPDATE ${TABLE.TODO} SET title=?, isCompleted=? WHERE id=?`,
+      [title, isCompleted, id]
+    );
+    return result.affectedRows;
+  },
   delete: async ({ id }: ITodo) => {},
 };
