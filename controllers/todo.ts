@@ -7,9 +7,10 @@ import { v4 } from 'https://deno.land/std/uuid/mod.ts';
 
 import todos from '../stubs/todos.ts';
 import ITodo from '../interfaces/ITodo.ts';
+import todoRepository from '../repositories/todoRepository.ts';
 
 export default {
-  getAll: ({
+  getAll: async ({
     request,
     response,
     params,
@@ -18,8 +19,16 @@ export default {
     response: Response;
     params: RouteParams;
   }) => {
-    response.status = 200;
-    response.body = todos;
+    try {
+      const data = await todoRepository.getAll();
+
+      response.status = 200;
+      response.body = data;
+    } catch (error) {
+      response.status = 400;
+
+      console.error(error);
+    }
   },
   create: async ({
     request,
@@ -30,23 +39,29 @@ export default {
     response: Response;
     params: RouteParams;
   }) => {
-    if (!request.hasBody) {
+    try {
+      if (!request.hasBody) {
+        response.status = 400;
+        response.body = 'No data provided';
+      } else {
+        const body = await request.body();
+        const todo = body.value as ITodo;
+
+        todo.isCompleted = false;
+
+        const { lastInsertId } = await todoRepository.add(todo);
+
+        todo.id = lastInsertId;
+
+        response.status = 201;
+        response.body = todo;
+      }
+    } catch (error) {
       response.status = 400;
-      response.body = 'No data provided';
-    } else {
-      const body = await request.body();
-      const todo = body.value as ITodo;
-
-      todo.id = v4.generate();
-      todo.isCompleted = false;
-
-      todos.push(todo);
-
-      response.status = 201;
-      response.body = todo;
+      console.error(error);
     }
   },
-  getById: ({
+  getById: async ({
     request,
     response,
     params,
@@ -55,14 +70,21 @@ export default {
     response: Response;
     params: any;
   }) => {
-    let { id }: { id: string } = params;
-    const todo: ITodo | undefined = todos.find((todo) => todo.id === id);
+    try {
+      let { id }: { id: string } = params;
+      const todoIsAvailable = await todoRepository.exists({ id });
 
-    if (!todo) {
-      response.status = 404;
-    } else {
-      response.status = 200;
-      response.body = todo;
+      if (!todoIsAvailable) {
+        response.status = 404;
+      } else {
+        const todo = await todoRepository.get({ id });
+
+        response.status = 200;
+        response.body = todo;
+      }
+    } catch (error) {
+      response.status = 400;
+      console.error(error);
     }
   },
   update: async ({
@@ -74,32 +96,40 @@ export default {
     response: Response;
     params: any;
   }) => {
-    if (!request.hasBody) {
-      response.status = 400;
-      response.body = 'No data provided';
-    } else {
-      let { id }: { id: string } = params;
-      const todoFound: ITodo | undefined = todos.find((todo) => todo.id === id);
-
-      if (!todoFound) {
-        response.status = 404;
+    try {
+      if (!request.hasBody) {
+        response.status = 400;
+        response.body = 'No data provided';
       } else {
-        const body = await request.body();
-        const todoUpdated = body.value as ITodo;
+        let { id }: { id: string } = params;
+        const todoIsAvailable = await todoRepository.exists({
+          id,
+        });
 
-        todoFound.title = todoUpdated.title;
-        todoFound.isCompleted = todoUpdated.isCompleted;
+        if (!todoIsAvailable) {
+          response.status = 404;
+        } else {
+          const body = await request.body();
+          const todoUpdated = body.value as ITodo;
 
-        todos.map((todo) =>
-          todo.id === todo.id ? { ...todo, ...todoFound } : todo
-        );
+          await todoRepository.update({
+            id,
+            title: todoUpdated.title,
+            isCompleted: todoUpdated.isCompleted,
+          });
 
-        response.status = 200;
-        response.body = todoFound;
+          todoUpdated.id = id;
+
+          response.status = 200;
+          response.body = todoUpdated;
+        }
       }
+    } catch (error) {
+      response.status = 400;
+      console.error(error);
     }
   },
-  delete: ({
+  delete: async ({
     request,
     response,
     params,
@@ -108,17 +138,24 @@ export default {
     response: Response;
     params: any;
   }) => {
-    let { id }: { id: string } = params;
-    const todoFound: ITodo | undefined = todos.find((todo) => todo.id === id);
+    try {
+      let { id }: { id: string } = params;
+      const todoIsAvailable = await todoRepository.exists({
+        id,
+      });
 
-    if (!todoFound) {
-      response.status = 404;
-    } else {
-      const todoIndex = todos.findIndex((todo) => todo.id == todoFound.id);
+      if (!todoIsAvailable) {
+        response.status = 404;
+      } else {
+        await todoRepository.delete({
+          id,
+        });
 
-      todos.splice(todoIndex, 1);
-
-      response.status = 200;
+        response.status = 200;
+      }
+    } catch (error) {
+      response.status = 400;
+      console.error(error);
     }
   },
 };
