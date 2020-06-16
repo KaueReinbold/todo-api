@@ -129,7 +129,7 @@ export default {
       console.error(error);
     }
   },
-  delete: ({
+  delete: async ({
     request,
     response,
     params,
@@ -138,17 +138,24 @@ export default {
     response: Response;
     params: any;
   }) => {
-    let { id }: { id: string } = params;
-    const todoFound: ITodo | undefined = todos.find((todo) => todo.id === id);
+    try {
+      let { id }: { id: string } = params;
+      const todoIsAvailable = await todoRepository.exists({
+        id,
+      });
 
-    if (!todoFound) {
-      response.status = 404;
-    } else {
-      const todoIndex = todos.findIndex((todo) => todo.id == todoFound.id);
+      if (!todoIsAvailable) {
+        response.status = 404;
+      } else {
+        await todoRepository.delete({
+          id,
+        });
 
-      todos.splice(todoIndex, 1);
-
-      response.status = 200;
+        response.status = 200;
+      }
+    } catch (error) {
+      response.status = 400;
+      console.error(error);
     }
   },
 };
