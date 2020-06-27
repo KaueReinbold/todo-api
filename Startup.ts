@@ -10,11 +10,7 @@ let Services: ServiceCollection;
 
 Services = new ServiceCollection();
 
-export const RegisterService = (): ServiceCollection => {
-  Services.addScoped<IFilter>(Types.IFilter, TodoFilter);
-  Services.addScoped<IController>(Types.IController, TodoController);
-
-  return Services;
-};
+Services.addScoped<IFilter>(Types.IFilter, TodoFilter);
+Services.addScoped<IController>(Types.IController, TodoController);
 
 export default Services;
