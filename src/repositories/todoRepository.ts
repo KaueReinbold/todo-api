@@ -35,11 +35,10 @@ class TodoRepository implements IRepository<ITodo> {
   }
 
   async add({ title, isCompleted }: ITodo): Promise<ITodo | null> {
-    const result = await this.connection.query(
+    await this.connection.query(
       `INSERT INTO todo (title, isCompleted) values(?, ?)`,
       [title, isCompleted]
     );
-    console.log(result);
 
     return {
       title: title,
@@ -48,7 +47,7 @@ class TodoRepository implements IRepository<ITodo> {
   }
 
   async update(id: number, todo: ITodo): Promise<number> {
-    const result = await this.connection.query(
+    await this.connection.query(
       `UPDATE todo SET title=?, isCompleted=? WHERE id=?`,
       [todo.title, todo.isCompleted, id]
     );
@@ -57,10 +56,7 @@ class TodoRepository implements IRepository<ITodo> {
   }
 
   async remove(id: number): Promise<number> {
-    const result = await this.connection.query(
-      `DELETE FROM todo WHERE id = ?`,
-      [id]
-    );
+    await this.connection.query(`DELETE FROM todo WHERE id = ?`, [id]);
     return id;
   }
 }

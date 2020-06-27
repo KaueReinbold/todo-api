@@ -18,20 +18,14 @@ class MySQLConnection implements IConnection {
 
   constructor() {
     this._client = new Client();
-
-    this._client.connect({
-      hostname: environment.MYSQL_HOSTNAME,
-      username: environment.MYSQL_USERNAME,
-      password: environment.MYSQL_PASSWORD,
-      db: '',
-    });
-
-    this.createIfNotExists();
   }
+
   async useDatabase(): Promise<void> {
     await this._client.execute(`USE ${this.DATABASE_NAME}`);
   }
   async createIfNotExists(): Promise<void> {
+    this.open();
+
     await this._client.execute(
       `CREATE DATABASE IF NOT EXISTS ${this.DATABASE_NAME}`
     );
@@ -51,11 +45,32 @@ class MySQLConnection implements IConnection {
           PRIMARY KEY (id)
           ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
             `);
+
+    this.close();
   }
 
   async query<T>(sql: string, params?: any[]): Promise<T> {
+    this.open();
     this.useDatabase();
-    return (await this._client.query(sql, params)) as T;
+
+    const result = (await this._client.query(sql, params)) as T;
+
+    this.close();
+
+    return result;
+  }
+
+  async open(): Promise<void> {
+    this._client.connect({
+      hostname: environment.MYSQL_HOSTNAME,
+      username: environment.MYSQL_USERNAME,
+      password: environment.MYSQL_PASSWORD,
+      db: '',
+    });
+  }
+
+  async close(): Promise<void> {
+    this._client.close();
   }
 }
 

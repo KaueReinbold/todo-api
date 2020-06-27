@@ -9,9 +9,13 @@ import logger from './src/middlewares/logger.ts';
 import notFound from './src/middlewares/notFound.ts';
 
 import TodoRouter from './src/routes/TodoRouter.ts';
+import MySQLConnection from './src/database/MySQLConnection.ts';
 
+const connection = new MySQLConnection();
 const app = new Application();
 const listenOptions: ListenOptions = { port: environment.PORT };
+
+connection.createIfNotExists();
 
 app.use(logger.logger);
 app.use(logger.responseTime);
