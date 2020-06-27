@@ -10,8 +10,8 @@ export const TABLE = {
 const client = await new Client();
 
 client.connect({
-  hostname: '127.0.0.1',
-  username: 'root',
+  hostname: environment.MYSQL_HOSTNAME,
+  username: environment.MYSQL_USERNAME,
   password: environment.MYSQL_PASSWORD,
   db: '',
 });
