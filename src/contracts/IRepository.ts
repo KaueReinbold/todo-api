@@ -4,6 +4,7 @@ interface IRepository<T> {
   get(id: number): Promise<T | null>;
   exists(id: number): Promise<boolean>;
   update(id: number, item: T): Promise<number>;
+  remove(id: number): Promise<number>;
 }
 
 export default IRepository;

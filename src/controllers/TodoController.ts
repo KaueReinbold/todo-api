@@ -42,15 +42,15 @@ class TodoController implements IController<ITodo> {
     return result;
   }
 
-  // delete: async (id: number): Promise<number | null> => {
-  //   const todoExists = await TodoRepository.exists(id);
+  async remove(id: number): Promise<number | null> {
+    const todoExists = await this.repository.exists(id);
 
-  //   if (!todoExists) return null;
+    if (!todoExists) return null;
 
-  //   await TodoRepository.delete(id);
+    await this.repository.remove(id);
 
-  //   return id;
-  // },
+    return id;
+  }
 }
 
 export default TodoController;

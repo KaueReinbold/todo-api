@@ -14,7 +14,7 @@ class TodoFilter implements IFilter<ITodo> {
     private controller: IController<ITodo>
   ) {}
 
-  async getAll(context: Context) {
+  async getAll(context: Context): Promise<void> {
     try {
       const result = await this.controller.getAll();
 
@@ -26,7 +26,7 @@ class TodoFilter implements IFilter<ITodo> {
     }
   }
 
-  async post(context: Context) {
+  async post(context: Context): Promise<void> {
     try {
       if (!context.request.hasBody) {
         context.response.status = 400;
@@ -50,7 +50,7 @@ class TodoFilter implements IFilter<ITodo> {
     }
   }
 
-  async getById(id: number, context: Context) {
+  async getById(id: number, context: Context): Promise<void> {
     try {
       const result = await this.controller.getById(id);
 
@@ -66,7 +66,7 @@ class TodoFilter implements IFilter<ITodo> {
     }
   }
 
-  async put(id: number, context: Context) {
+  async put(id: number, context: Context): Promise<void> {
     try {
       if (!context.request.hasBody) {
         context.response.status = 400;
@@ -90,28 +90,20 @@ class TodoFilter implements IFilter<ITodo> {
     }
   }
 
-  // delete: async ({
-  //   response,
-  //   params,
-  // }: {
-  //   request: Request;
-  //   response: Response;
-  //   params: any;
-  // }) => {
-  //   try {
-  //     const { id }: { id: number } = params;
-  //     const result = await TodoController.delete(id);
+  async delete(id: number, context: Context): Promise<void> {
+    try {
+      const result = await this.controller.remove(id);
 
-  //     if (result) {
-  //       response.status = 200;
-  //     } else {
-  //       response.status = 404;
-  //     }
-  //   } catch (error) {
-  //     response.status = 400;
-  //     console.error(error);
-  //   }
-  // },
+      if (result) {
+        context.response.status = 200;
+      } else {
+        context.response.status = 404;
+      }
+    } catch (error) {
+      context.response.status = 400;
+      console.error(error);
+    }
+  }
 }
 
 export default TodoFilter;

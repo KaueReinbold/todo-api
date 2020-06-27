@@ -1,5 +1,5 @@
 import { Router, Context } from 'https://deno.land/x/oak/mod.ts';
-
+'';
 import Services from '../Startup.ts';
 
 import ITodo from '../interfaces/ITodo.ts';
@@ -28,6 +28,12 @@ TodoRouter.get('/todos', async (context: Context) => {
     const id = context.params.id as number;
 
     await todoFilter.put(id, context);
+  })
+  .delete('/todos/:id', async (context: any) => {
+    const todoFilter = Services.get<IFilter<ITodo>>(Types.IFilter);
+    const id = context.params.id as number;
+
+    await todoFilter.delete(id, context);
   });
 
 export default TodoRouter;

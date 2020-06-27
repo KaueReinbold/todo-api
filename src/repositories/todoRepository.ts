@@ -1,4 +1,4 @@
-import { Service, Inject } from 'https://deno.land/x/di/mod.ts';
+import { Service } from 'https://deno.land/x/di/mod.ts';
 
 import client, { TABLE, DATABASE_NAME } from '../database/client.ts';
 
@@ -49,13 +49,13 @@ class TodoRepository implements IRepository<ITodo> {
     return result.affectedRows;
   }
 
-  // delete: async (id: number) => {
-  //   const result = await client.query(
-  //     `DELETE FROM ${TABLE.TODO} WHERE id = ?`,
-  //     [id]
-  //   );
-  //   return result.affectedRows;
-  // },
+  async remove(id: number): Promise<number> {
+    const result = await client.query(
+      `DELETE FROM ${TABLE.TODO} WHERE id = ?`,
+      [id]
+    );
+    return result.affectedRows;
+  }
 }
 
 export default TodoRepository;
