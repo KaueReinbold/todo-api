@@ -16,10 +16,12 @@ class TodoRepository implements IRepository<ITodo> {
   //   );
   //   return result.count > 0;
   // },
+
   async getAll(): Promise<ITodo[] | []> {
     const todos = await client.query(`SELECT * FROM ${TABLE.TODO}`);
     return todos as ITodo[] | [];
   }
+
   // get: async (id: number) => {
   //   const todos = await client.query(
   //     `SELECT * FROM ${TABLE.TODO} WHERE id = ?`,
@@ -27,17 +29,19 @@ class TodoRepository implements IRepository<ITodo> {
   //   );
   //   return todos[0];
   // },
-  // add: async ({ title, isCompleted }: ITodo) => {
-  //   const result = await client.query(
-  //     `INSERT INTO ${TABLE.TODO}(title, isCompleted) values(?, ?)`,
-  //     [title, isCompleted]
-  //   );
-  //   return {
-  //     id: result.affectedRows,
-  //     title: title,
-  //     isCompleted: isCompleted,
-  //   } as ITodo;
-  // },
+
+  async add({ title, isCompleted }: ITodo) {
+    const result = await client.query(
+      `INSERT INTO ${TABLE.TODO}(title, isCompleted) values(?, ?)`,
+      [title, isCompleted]
+    );
+    return {
+      id: result.affectedRows,
+      title: title,
+      isCompleted: isCompleted,
+    } as ITodo;
+  }
+
   // update: async (id: number, todo: ITodo) => {
   //   const result = await client.query(
   //     `UPDATE ${TABLE.TODO} SET title=?, isCompleted=? WHERE id=?`,

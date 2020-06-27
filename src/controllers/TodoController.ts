@@ -17,13 +17,14 @@ class TodoController implements IController<ITodo> {
 
     return todos as ITodo[];
   }
-  // create: async (todo: ITodo): Promise<ITodo | null> => {
-  //   todo.isCompleted = false;
 
-  //   todo = await TodoRepository.add(todo);
+  async create(todo: ITodo): Promise<ITodo | null> {
+    todo.isCompleted = false;
 
-  //   return todo;
-  // },
+    const result = await this.repository.add(todo);
+
+    return result;
+  }
   // getById: async (id: number): Promise<ITodo | null> => {
   //   let todoExists = await TodoRepository.exists(id);
 

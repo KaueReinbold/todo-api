@@ -26,35 +26,29 @@ class TodoFilter implements IFilter<ITodo> {
     }
   }
 
-  // create: async ({
-  //   request,
-  //   response,
-  // }: {
-  //   request: Request;
-  //   response: Response;
-  // }) => {
-  //   try {
-  //     if (!request.hasBody) {
-  //       response.status = 400;
-  //       response.body = 'No data provided';
-  //     } else {
-  //       const body = await request.body();
-  //       const todo = body.value as ITodo;
+  async post(context: Context) {
+    try {
+      if (!context.request.hasBody) {
+        context.response.status = 400;
+        context.response.body = 'No data provided';
+      } else {
+        const body = await context.request.body();
+        const todo = body.value as ITodo;
 
-  //       const result = await TodoController.create(todo);
+        const result = await this.controller.create(todo);
 
-  //       if (result) {
-  //         response.status = 201;
-  //         response.body = result;
-  //       } else {
-  //         throw new Error('En error occurred when inserting');
-  //       }
-  //     }
-  //   } catch (error) {
-  //     response.status = 400;
-  //     console.error(error);
-  //   }
-  // },
+        if (result) {
+          context.response.status = 201;
+          context.response.body = result;
+        } else {
+          throw new Error('En error occurred when inserting');
+        }
+      }
+    } catch (error) {
+      context.response.status = 400;
+      console.error(error);
+    }
+  }
 
   // getById: async ({
   //   response,

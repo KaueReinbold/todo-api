@@ -12,6 +12,9 @@ const TodoRouter = new Router();
 TodoRouter.get('/todos', async (context: Context) => {
   const todoFilter = Services.get<IFilter<ITodo>>(Types.IFilter);
   await todoFilter.getAll(context);
+}).post('/todos', async (context: Context) => {
+  const todoFilter = Services.get<IFilter<ITodo>>(Types.IFilter);
+  await todoFilter.post(context);
 });
 
 export default TodoRouter;
