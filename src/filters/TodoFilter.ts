@@ -77,9 +77,8 @@ class TodoFilter implements IFilter<ITodo> {
 
         const result = await this.controller.update(id, todo);
 
-        if (result) {
+        if (result !== null) {
           context.response.status = 200;
-          context.response.body = result;
         } else {
           context.response.status = 404;
         }
