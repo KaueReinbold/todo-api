@@ -7,9 +7,6 @@ import environment from './environment.ts';
 
 import logger from './src/middlewares/logger.ts';
 import notFound from './src/middlewares/notFound.ts';
-import { RegisterService } from './startup.ts';
-
-RegisterService();
 
 import TodoRouter from './src/routes/TodoRouter.ts';
 
