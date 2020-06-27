@@ -10,7 +10,15 @@
       "request": "launch",
       "cwd": "${workspaceFolder}",
       "runtimeExecutable": "deno",
-      "runtimeArgs": ["run", "--inspect-brk", "-A", "--allow-net", "server.ts"],
+      "runtimeArgs": [
+        "run",
+        "--inspect-brk",
+        "-A",
+        "--allow-net",
+        "--config",
+        "tsconfig.json",
+        "Server.ts"
+      ],
       "port": 9229
     }
   ]
