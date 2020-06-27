@@ -7,30 +7,29 @@ import IRepository from '../contracts/IRepository.ts';
 
 @Service()
 class TodoRepository implements IRepository<ITodo> {
-  // exists: async (id: number) => {
-  //   const [
-  //     result,
-  //   ] = await client.query(
-  //     `SELECT COUNT(*) count FROM ${TABLE.TODO} WHERE id = ? LIMIT 1`,
-  //     [id]
-  //   );
-  //   return result.count > 0;
-  // },
+  async exists(id: number): Promise<boolean> {
+    const [
+      result,
+    ] = await client.query(
+      `SELECT COUNT(*) count FROM ${TABLE.TODO} WHERE id = ? LIMIT 1`,
+      [id]
+    );
+    return result.count > 0;
+  }
 
   async getAll(): Promise<ITodo[] | []> {
     const todos = await client.query(`SELECT * FROM ${TABLE.TODO}`);
     return todos as ITodo[] | [];
   }
 
-  // get: async (id: number) => {
-  //   const todos = await client.query(
-  //     `SELECT * FROM ${TABLE.TODO} WHERE id = ?`,
-  //     [id]
-  //   );
-  //   return todos[0];
-  // },
+  async get(id: number): Promise<ITodo | null> {
+    const [
+      todo,
+    ] = await client.query(`SELECT * FROM ${TABLE.TODO} WHERE id = ?`, [id]);
+    return todo as ITodo;
+  }
 
-  async add({ title, isCompleted }: ITodo) {
+  async add({ title, isCompleted }: ITodo): Promise<ITodo | null> {
     const result = await client.query(
       `INSERT INTO ${TABLE.TODO}(title, isCompleted) values(?, ?)`,
       [title, isCompleted]
