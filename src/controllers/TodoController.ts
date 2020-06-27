@@ -37,6 +37,10 @@ class TodoController implements IController<ITodo> {
   }
 
   async update(id: number, todo: ITodo): Promise<number | null> {
+    let todoExists = await this.repository.exists(id);
+
+    if (!todoExists) return null;
+
     const result = await this.repository.update(id, todo);
 
     return result;
