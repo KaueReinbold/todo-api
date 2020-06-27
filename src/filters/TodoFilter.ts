@@ -1,19 +1,17 @@
-import { Request, Response, Context } from 'https://deno.land/x/oak/mod.ts';
+import { Context } from 'https://deno.land/x/oak/mod.ts';
 import { Service, Inject } from 'https://deno.land/x/di/mod.ts';
 
-import { IController } from '../controllers/TodoController.ts';
 import ITodo from '../interfaces/ITodo.ts';
-import { Types } from '../../types.ts';
 
-export interface IFilter {
-  getAll(context: Context): void;
-}
+import Types from '../contracts/Types.ts';
+import IController from '../contracts/IController.ts';
+import IFilter from '../contracts/IFilter.ts';
 
 @Service()
-class TodoFilter implements IFilter {
+class TodoFilter implements IFilter<ITodo> {
   constructor(
     @Inject(Types.IController)
-    private controller: IController
+    private controller: IController<ITodo>
   ) {}
 
   async getAll(context: Context) {
