@@ -1,5 +1,5 @@
 import { Router, Context } from 'https://deno.land/x/oak/mod.ts';
-'';
+
 import Services from '../Startup.ts';
 
 import ITodo from '../interfaces/ITodo.ts';

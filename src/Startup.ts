@@ -8,11 +8,14 @@ import ITodo from './interfaces/ITodo.ts';
 import IController from './contracts/IController.ts';
 import IRepository from './contracts/IRepository.ts';
 import TodoRepository from './repositories/TodoRepository.ts';
+import IConnection from './contracts/IConnection.ts';
+import MySQLConnection from './database/MySQLConnection.ts';
 
 let Services: ServiceCollection;
 
 Services = new ServiceCollection();
 
+Services.addScoped<IConnection>(Types.IConnection, MySQLConnection);
 Services.addScoped<IRepository<ITodo>>(Types.IRepository, TodoRepository);
 Services.addScoped<IFilter<ITodo>>(Types.IFilter, TodoFilter);
 Services.addScoped<IController<ITodo>>(Types.IController, TodoController);
