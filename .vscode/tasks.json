@@ -5,7 +5,7 @@
   "tasks": [
     {
       "label": "deno run",
-      "command": "deno run --allow-net --allow-read server.ts",
+      "command": "deno run --allow-net --allow-read --config tsconfig.json Server.ts",
       "type": "shell",
       "presentation": {
         "reveal": "silent"
