@@ -1,14 +1,11 @@
 import { Service } from 'https://deno.land/x/di/mod.ts';
 
 import ITodo from '../interfaces/ITodo.ts';
-import TodoRepository from '../repositories/TodoRepository.ts';
-
-export interface IController {
-  getAll(): Promise<ITodo[] | null>;
-}
+import IController from '../contracts/IController.ts';
+// import TodoRepository from '../repositories/TodoRepository.ts';
 
 @Service()
-class TodoController implements IController {
+class TodoController implements IController<ITodo> {
   async getAll(): Promise<ITodo[] | null> {
     const todos = [{ id: '1', title: 'string', isCompleted: true }];
 
