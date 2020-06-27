@@ -41,13 +41,14 @@ class TodoRepository implements IRepository<ITodo> {
     } as ITodo;
   }
 
-  // update: async (id: number, todo: ITodo) => {
-  //   const result = await client.query(
-  //     `UPDATE ${TABLE.TODO} SET title=?, isCompleted=? WHERE id=?`,
-  //     [todo.title, todo.isCompleted, id]
-  //   );
-  //   return result.affectedRows;
-  // },
+  async update(id: number, todo: ITodo): Promise<number> {
+    const result = await client.query(
+      `UPDATE ${TABLE.TODO} SET title=?, isCompleted=? WHERE id=?`,
+      [todo.title, todo.isCompleted, id]
+    );
+    return result.affectedRows;
+  }
+
   // delete: async (id: number) => {
   //   const result = await client.query(
   //     `DELETE FROM ${TABLE.TODO} WHERE id = ?`,

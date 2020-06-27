@@ -66,38 +66,29 @@ class TodoFilter implements IFilter<ITodo> {
     }
   }
 
-  // update: async ({
-  //   request,
-  //   response,
-  //   params,
-  // }: {
-  //   request: Request;
-  //   response: Response;
-  //   params: any;
-  // }) => {
-  //   try {
-  //     if (!request.hasBody) {
-  //       response.status = 400;
-  //       response.body = 'No data provided';
-  //     } else {
-  //       const { id }: { id: number } = params;
-  //       const body = await request.body();
-  //       const todo = body.value as ITodo;
+  async put(id: number, context: Context) {
+    try {
+      if (!context.request.hasBody) {
+        context.response.status = 400;
+        context.response.body = 'No data provided';
+      } else {
+        const body = await context.request.body();
+        const todo = body.value as ITodo;
 
-  //       const result = await TodoController.update(id, todo);
+        const result = await this.controller.update(id, todo);
 
-  //       if (result) {
-  //         response.status = 200;
-  //         response.body = result;
-  //       } else {
-  //         response.status = 404;
-  //       }
-  //     }
-  //   } catch (error) {
-  //     response.status = 400;
-  //     console.error(error);
-  //   }
-  // },
+        if (result) {
+          context.response.status = 200;
+          context.response.body = result;
+        } else {
+          context.response.status = 404;
+        }
+      }
+    } catch (error) {
+      context.response.status = 400;
+      console.error(error);
+    }
+  }
 
   // delete: async ({
   //   response,

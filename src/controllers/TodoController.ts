@@ -36,11 +36,12 @@ class TodoController implements IController<ITodo> {
     return todo;
   }
 
-  // update: async (id: number, todo: ITodo): Promise<ITodo | null> => {
-  //   todo = await TodoRepository.update(id, todo);
+  async update(id: number, todo: ITodo): Promise<number | null> {
+    const result = await this.repository.update(id, todo);
 
-  //   return todo;
-  // },
+    return result;
+  }
+
   // delete: async (id: number): Promise<number | null> => {
   //   const todoExists = await TodoRepository.exists(id);
 

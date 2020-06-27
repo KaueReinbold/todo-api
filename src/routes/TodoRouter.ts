@@ -22,6 +22,12 @@ TodoRouter.get('/todos', async (context: Context) => {
     const id = context.params.id as number;
 
     await todoFilter.getById(id, context);
+  })
+  .put('/todos/:id', async (context: any) => {
+    const todoFilter = Services.get<IFilter<ITodo>>(Types.IFilter);
+    const id = context.params.id as number;
+
+    await todoFilter.put(id, context);
   });
 
 export default TodoRouter;
