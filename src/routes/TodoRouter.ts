@@ -9,9 +9,9 @@ import Types from '../contracts/Types.ts';
 
 const TodoRouter = new Router();
 
-TodoRouter.get('/todos', (context: Context) => {
+TodoRouter.get('/todos', async (context: Context) => {
   const todoFilter = Services.get<IFilter<ITodo>>(Types.IFilter);
-  todoFilter.getAll(context);
+  await todoFilter.getAll(context);
 });
 
 export default TodoRouter;

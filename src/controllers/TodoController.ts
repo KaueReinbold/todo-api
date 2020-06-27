@@ -1,15 +1,21 @@
-import { Service } from 'https://deno.land/x/di/mod.ts';
+import { Service, Inject } from 'https://deno.land/x/di/mod.ts';
 
 import ITodo from '../interfaces/ITodo.ts';
 import IController from '../contracts/IController.ts';
+import Types from '../contracts/Types.ts';
+import IRepository from '../contracts/IRepository.ts';
 // import TodoRepository from '../repositories/TodoRepository.ts';
 
 @Service()
 class TodoController implements IController<ITodo> {
-  async getAll(): Promise<ITodo[] | null> {
-    const todos = [{ id: '1', title: 'string', isCompleted: true }];
+  constructor(
+    @Inject(Types.IRepository) private repository: IRepository<ITodo>
+  ) {}
 
-    return todos as ITodo[] | null;
+  async getAll(): Promise<ITodo[] | null> {
+    const todos = await this.repository.getAll();
+
+    return todos as ITodo[];
   }
   // create: async (todo: ITodo): Promise<ITodo | null> => {
   //   todo.isCompleted = false;

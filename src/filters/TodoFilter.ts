@@ -16,8 +16,6 @@ class TodoFilter implements IFilter<ITodo> {
 
   async getAll(context: Context) {
     try {
-      console.log(context);
-
       const result = await this.controller.getAll();
 
       context.response.status = 200;
