@@ -32,8 +32,8 @@ class TodoFilter implements IFilter<ITodo> {
         context.response.status = 400;
         context.response.body = 'No data provided';
       } else {
-        const body = await context.request.body();
-        const todo = body.value as ITodo;
+        const body = await context.request.body().value;
+        const todo = body as ITodo;
 
         const result = await this.controller.create(todo);
 
@@ -72,8 +72,8 @@ class TodoFilter implements IFilter<ITodo> {
         context.response.status = 400;
         context.response.body = 'No data provided';
       } else {
-        const body = await context.request.body();
-        const todo = body.value as ITodo;
+        const body = await context.request.body().value;
+        const todo = body as ITodo;
 
         const result = await this.controller.update(id, todo);
 
