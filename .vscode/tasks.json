@@ -13,6 +13,15 @@
       "problemMatcher": "$msCompile"
     },
     {
+      "label": "deno test",
+      "command": "deno test --failfast",
+      "type": "shell",
+      "presentation": {
+        "reveal": "silent"
+      },
+      "problemMatcher": "$msCompile"
+    },
+    {
       "label": "docker-compose up",
       "command": "docker-compose up -d",
       "type": "shell",
