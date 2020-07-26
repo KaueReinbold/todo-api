@@ -2,6 +2,8 @@
 
 The technical objective is to learn how to use [Deno](https://deno.land/).
 
+![Deno image](https://deno.land/images/deno_logo_4.gif)
+
 ## Inspiration
 
 It was followed the tutorials from FreeCodeCamp:
