@@ -1,0 +1,29 @@
+GET http://localhost:8080/todos HTTP/1.1
+
+###
+
+GET http://localhost:8080/todos/1 HTTP/1.1
+
+###
+
+POST http://localhost:8080/todos HTTP/1.1
+content-type: application/json
+
+{
+	"title": "My First todo with Deno"
+}
+
+###
+
+PUT  http://localhost:8080/todos/1 HTTP/1.1
+content-type: application/json
+
+{
+	"title": "My First Editing todo with Deno",
+    "isCompleted": true
+}
+
+###
+
+DELETE  http://localhost:8080/todos/2 HTTP/1.1
+content-type: application/json
