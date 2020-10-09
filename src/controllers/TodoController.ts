@@ -1,24 +1,24 @@
 import { Service, Inject } from 'https://deno.land/x/di/mod.ts';
 
-import ITodo from '../interfaces/ITodo.ts';
+import Todo from '../models/Todo.ts';
 import IController from '../contracts/IController.ts';
-import Types from '../contracts/Types.ts';
+import Types from '../types/index.ts';
 import IRepository from '../contracts/IRepository.ts';
 // import TodoRepository from '../repositories/TodoRepository.ts';
 
 @Service()
-class TodoController implements IController<ITodo> {
+class TodoController implements IController<Todo> {
   constructor(
-    @Inject(Types.IRepository) private repository: IRepository<ITodo>
+    @Inject(Types.IRepository) private repository: IRepository<Todo>
   ) {}
 
-  async getAll(): Promise<ITodo[] | null> {
+  async getAll(): Promise<Todo[] | null> {
     const todos = await this.repository.getAll();
 
-    return todos as ITodo[];
+    return todos as Todo[];
   }
 
-  async create(todo: ITodo): Promise<ITodo | null> {
+  async create(todo: Todo): Promise<Todo | null> {
     todo.isCompleted = false;
 
     const result = await this.repository.add(todo);
@@ -26,7 +26,7 @@ class TodoController implements IController<ITodo> {
     return result;
   }
 
-  async getById(id: number): Promise<ITodo | null> {
+  async getById(id: number): Promise<Todo | null> {
     let todoExists = await this.repository.exists(id);
 
     if (!todoExists) return null;
@@ -36,7 +36,7 @@ class TodoController implements IController<ITodo> {
     return todo;
   }
 
-  async update(id: number, todo: ITodo): Promise<number | null> {
+  async update(id: number, todo: Todo): Promise<number | null> {
     let todoExists = await this.repository.exists(id);
 
     if (!todoExists) return null;

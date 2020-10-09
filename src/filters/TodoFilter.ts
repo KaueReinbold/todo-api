@@ -1,17 +1,17 @@
 import { Context } from 'https://deno.land/x/oak/mod.ts';
 import { Service, Inject } from 'https://deno.land/x/di/mod.ts';
 
-import ITodo from '../interfaces/ITodo.ts';
+import Todo from '../models/Todo.ts';
 
-import Types from '../contracts/Types.ts';
+import Types from '../types/index.ts';
 import IController from '../contracts/IController.ts';
 import IFilter from '../contracts/IFilter.ts';
 
 @Service()
-class TodoFilter implements IFilter<ITodo> {
+class TodoFilter implements IFilter<Todo> {
   constructor(
     @Inject(Types.IController)
-    private controller: IController<ITodo>
+    private controller: IController<Todo>
   ) {}
 
   async getAll(context: Context): Promise<void> {
@@ -33,7 +33,7 @@ class TodoFilter implements IFilter<ITodo> {
         context.response.body = 'No data provided';
       } else {
         const body = await context.request.body().value;
-        const todo = body as ITodo;
+        const todo = body as Todo;
 
         const result = await this.controller.create(todo);
 
@@ -73,7 +73,7 @@ class TodoFilter implements IFilter<ITodo> {
         context.response.body = 'No data provided';
       } else {
         const body = await context.request.body().value;
-        const todo = body as ITodo;
+        const todo = body as Todo;
 
         const result = await this.controller.update(id, todo);
 

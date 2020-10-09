@@ -1,12 +1,12 @@
 import { Service, Inject } from 'https://deno.land/x/di/mod.ts';
 
-import ITodo from '../interfaces/ITodo.ts';
+import Todo from '../models/Todo.ts';
 import IRepository from '../contracts/IRepository.ts';
-import Types from '../contracts/Types.ts';
+import Types from '../types/index.ts';
 import IConnection from '../contracts/IConnection.ts';
 
 @Service()
-class TodoRepository implements IRepository<ITodo> {
+class TodoRepository implements IRepository<Todo> {
   constructor(@Inject(Types.IConnection) private connection: IConnection) {}
 
   async exists(id: number): Promise<boolean> {
@@ -20,21 +20,21 @@ class TodoRepository implements IRepository<ITodo> {
     return result.count > 0;
   }
 
-  async getAll(): Promise<ITodo[] | []> {
+  async getAll(): Promise<Todo[] | []> {
     const todos = await this.connection.query(`SELECT * FROM todo`);
 
-    return todos as ITodo[] | [];
+    return todos as Todo[] | [];
   }
 
-  async get(id: number): Promise<ITodo | null> {
+  async get(id: number): Promise<Todo | null> {
     const [
       todo,
     ] = await this.connection.query(`SELECT * FROM todo WHERE id = ?`, [id]);
 
-    return todo as ITodo;
+    return todo as Todo;
   }
 
-  async add({ title, isCompleted }: ITodo): Promise<ITodo | null> {
+  async add({ title, isCompleted }: Todo): Promise<Todo | null> {
     await this.connection.query(
       `INSERT INTO todo (title, isCompleted) values(?, ?)`,
       [title, isCompleted]
@@ -43,10 +43,10 @@ class TodoRepository implements IRepository<ITodo> {
     return {
       title: title,
       isCompleted: isCompleted,
-    } as ITodo;
+    } as Todo;
   }
 
-  async update(id: number, todo: ITodo): Promise<number> {
+  async update(id: number, todo: Todo): Promise<number> {
     await this.connection.query(
       `UPDATE todo SET title=?, isCompleted=? WHERE id=?`,
       [todo.title, todo.isCompleted, id]
